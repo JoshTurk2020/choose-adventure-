@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grammar Dungeon Escape</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; background-color: #1c1c1c; color: #ffffff; }
+        .container { max-width: 800px; margin: 0 auto; }
+        .story { margin-bottom: 20px; }
+        .options { display: flex; justify-content: center; gap: 10px; margin-bottom: 30px; }
+        .option { padding: 10px 20px; background-color: #4a4a4a; cursor: pointer; border: none; color: #ffffff; }
+        .option:hover { background-color: #6a6a6a; }
+        .result { font-weight: bold; margin-bottom: 20px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Grammar Dungeon Escape</h1>
+        <p>Choose wisely and use correct grammar to escape the treacherous dungeon!</p>
+        <div class="story"></div>
+        <div class="options"></div>
+        <div class="result"></div>
+    </div>
+
+    <script>
+        const story = [
+            {
+                text: "You find yourself trapped in a dark, dank dungeon. A flickering torch on the wall barely illuminates the chamber. You hear the distant groans of undead creatures. What do you do?",
+                options: [
+                    { text: "I grab the torch and proceed cautiously.", next: 1 },
+                    { text: "I search the room for any useful items.", next: 2 }
+                ]
+            },
+            {
+                text: "As you ___ down the narrow corridor, a skeletal warrior emerges from the shadows, brandishing a rusty sword.",
+                options: [
+                    { text: "creep", next: 3 },
+                    { text: "creeps", result: "The skeleton catches you off guard and ends your journey abruptly." },
+                    { text: "will creep", result: "You hesitate, and the skeleton seizes the opportunity to strike you down." }
+                ]
+            },
+            {
+                text: "You rummage through the debris and find a hidden switch. You pull it, and a secret door opens. You ___ through the doorway.",
+                options: [
+                    { text: "dashes", result: "In your haste, you fail to notice a trap and meet a gruesome end." },
+                    { text: "dash", next: 4 },
+                    { text: "dashed", result: "As you rush through the doorway, a hidden blade swings down and ends your escape attempt." }
+                ]
+            },
+            {
+                text: "You ___ your sword and engage the skeletal warrior in combat.",
+                options: [
+                    { text: "draws", result: "The skeleton parries your clumsy attack and retaliates with a fatal blow." },
+                    { text: "drew", result: "You attempt to draw your sword, but fumble it, leaving yourself vulnerable to the skeleton's attack." },
+                    { text: "draw", next: 5 }
+                ]
+            },
+            {
+                text: "You find yourself in a dimly lit chamber with two doors. One door is adorned with intricate carvings, while the other is plain and unassuming. Which door do you choose?",
+                options: [
+                    { text: "I open the intricately carved door.", next: 6 },
+                    { text: "I choose the plain, unassuming door.", next: 7 }
+                ]
+            },
+            {
+                text: "With a swift strike, you ___ the skeletal warrior, shattering its bones. You continue your journey deeper into the dungeon.",
+                options: [
+                    { text: "defeated", result: "You let your guard down, thinking the danger had passed, but another skeleton emerges and catches you by surprise." },
+                    { text: "will defeat", result: "You're overconfident in your future victory, and the skeleton exploits your lack of focus, dealing a mortal blow." },
+                    { text: "defeat", next: 4 }
+                ]
+            },
+            {
+                text: "As you step through the carved doorway, you ___ into a hidden pit filled with poisonous spikes. Your journey ends here.",
+                options: [
+                    { text: "fall", result: "You plummet into the pit, meeting a painful demise." },
+                    { text: "fell", result: "You lose your footing and tumble into the pit, succumbing to the poison." },
+                    { text: "will fall", result: "You realize your mistake too late as you plunge into the deadly pit." }
+                ]
+            },
+            {
+                text: "You ___ the plain door and find yourself in a room filled with treasure and a glowing portal. You step through the portal and escape the dungeon, victorious!",
+                options: [
+                    { text: "open", result: "Congratulations! You've successfully escaped the treacherous dungeon using your grammatical prowess!" },
+                    { text: "opens", result: "You hesitate, and the portal closes, trapping you in the dungeon forever." },
+                    { text: "will open", result: "You wait too long, and the portal disappears, leaving you stranded in the dungeon." }
+                ]
+            }
+        ];
+
+        let currentScene = 0;
+
+        const storyElement = document.querySelector(".story");
+        const optionsElement = document.querySelector(".options");
+        const resultElement = document.querySelector(".result");
+
+        function showScene() {
+            const scene = story[currentScene];
+            storyElement.textContent = scene.text;
+            optionsElement.innerHTML = "";
+            scene.options.forEach(option => {
+                const button = document.createElement("button");
+                button.textContent = option.text;
+                button.classList.add("option");
+                button.addEventListener("click", () => selectOption(option));
+                optionsElement.appendChild(button);
+            });
+        }
+
+        function selectOption(option) {
+            if (option.hasOwnProperty("next")) {
+                currentScene = option.next;
+                showScene();
+            } else {
+                resultElement.textContent = option.result;
+                optionsElement.innerHTML = "";
+                const restartButton = document.createElement("button");
+                restartButton.textContent = "Restart";
+                restartButton.classList.add("option");
+                restartButton.addEventListener("click", () => {
+                    currentScene = 0;
+                    resultElement.textContent = "";
+                    showScene();
+                });
+                optionsElement.appendChild(restartButton);
+            }
+        }
+
+        showScene();
+    </script>
+</body>
+</html>
